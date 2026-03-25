@@ -1,61 +1,68 @@
 # imagen-character-lock
 
-**Claude Code Skill** for character-consistent AI image generation using Google Imagen 4.0.
+AI 이미지 생성 시 **캐릭터 외형 일관성**을 자동으로 보장하는 Claude Code 스킬.
 
-Solves the #1 problem in AI image generation for storytelling: **characters look different in every frame.**
+Google Imagen 4.0으로 스토리/영상용 이미지를 만들 때, 매 장면마다 인물이 다르게 생성되는 문제를 해결합니다.
 
-## The Problem
+## 문제
 
-When generating multiple images for a story/video with AI, each image creates a different-looking person — different face, age, hairstyle, body type. This makes the output unusable for coherent visual storytelling.
+AI로 여러 장면의 이미지를 생성하면 **같은 인물이 매번 다른 얼굴, 나이, 체형**으로 나옵니다.
+영상이나 스토리 제작에 치명적입니다.
 
-**Before (manual prompts):** 44% character consistency (8/18 images matched)
-**After (character_lock):** 100% character consistency (6/6 images matched)
+| | 수동 프롬프트 (v1) | character_lock (v2) |
+|---|---|---|
+| 캐릭터 일관성 | **44%** (8/18) | **100%** (6/6) |
+| 성별 오류 | 2건 | 0건 |
+| 재생성 필요 | 50% | 0% |
 
-## How It Works
+## 작동 원리
 
-Define your characters once in `character_lock`, reference them in each scene, and the pipeline automatically injects their physical descriptions into every prompt.
+캐릭터를 한 번 정의하고, 각 장면에서 이름으로 참조하면 파이프라인이 자동으로 외형 묘사를 주입합니다.
 
 ```
-character_lock (define once)     scenes (reference by name)
+character_lock (한 번 정의)       scenes (이름으로 참조)
 ┌───────────────────────┐       ┌──────────────────────────┐
-│ jina:                 │       │ scene 1:                 │
-│   morning: "age 35,   │──────▶│   characters: [jina.morning]│
-│     grey hoodie..."   │       │   prompt: "at desk 4am"  │
-│   office: "age 35,    │       │                          │
-│     black blazer..."  │──────▶│ scene 3:                 │
+│ jina:                 │       │ 씬 1:                    │
+│   morning: "35세,     │──────▶│   characters: [jina.morning]│
+│     후드, 안경..."    │       │   prompt: "새벽 책상..."  │
+│   office: "35세,      │       │                          │
+│     블레이저..."      │──────▶│ 씬 3:                    │
 │                       │       │   characters: [jina.office]│
-└───────────────────────┘       │   prompt: "presenting"   │
+└───────────────────────┘       │   prompt: "프레젠테이션"  │
                                 └──────────────────────────┘
 ```
 
-The script combines: `style_prefix` + `character descriptions` + `scene prompt`
+최종 프롬프트 = `style_prefix` + `캐릭터 묘사` + `장면 프롬프트`
 
-## Quick Start
+---
 
-### 1. Install
+## 빠른 시작
+
+### 1. 설치
 
 ```bash
-# As Claude Code skill
-claude skill add --from github:your-username/imagen-character-lock
+# Claude Code 스킬로 설치
+claude mcp add-skill github:ninestonelee/imagen-character-lock
 
-# Or standalone
-git clone https://github.com/your-username/imagen-character-lock.git
+# 또는 직접 클론
+git clone https://github.com/ninestonelee/imagen-character-lock.git
 pip install google-genai
 ```
 
-### 2. Set API Key
+### 2. API 키 설정
 
 ```bash
-# Option A: .env file in your project
+# 방법 A: .env 파일 (프로젝트 루트)
 echo "GOOGLE_API_KEY=AIzaSy..." > .env
 
-# Option B: environment variable
+# 방법 B: 환경변수
 export GOOGLE_API_KEY=AIzaSy...
 ```
 
-### 3. Create prompts.json
+### 3. prompts.json 작성
 
-Create `storyboard/prompts.json` in your project folder (see [templates/prompts.json](templates/prompts.json) for the full schema):
+프로젝트 폴더에 `storyboard/prompts.json`을 만듭니다.
+전체 스키마는 [templates/prompts.json](templates/prompts.json) 참조.
 
 ```json
 {
@@ -70,7 +77,7 @@ Create `storyboard/prompts.json` in your project folder (see [templates/prompts.
   "scenes": [
     {
       "scene": 1,
-      "title": "Dawn Coding",
+      "title": "새벽 코딩",
       "images": [{
         "filename": "01_dawn_coding.jpg",
         "characters": ["jina.morning"],
@@ -81,37 +88,41 @@ Create `storyboard/prompts.json` in your project folder (see [templates/prompts.
 }
 ```
 
-### 4. Generate
+### 4. 생성
 
 ```bash
-# Preview prompts (no API calls)
+# 프롬프트 미리보기 (API 호출 안 함)
 python3 scripts/generate_images.py my_project --dry-run
 
-# Generate all images
+# 전체 생성
 python3 scripts/generate_images.py my_project
 
-# Only missing images
+# 미생성분만
 python3 scripts/generate_images.py my_project --missing
 
-# Specific cuts only
+# 특정 컷만
 python3 scripts/generate_images.py my_project --only 01,04
 ```
 
-## CLI Options
+---
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `<project>` | Project folder path | (required) |
-| `--missing` | Only generate images not yet in `images/` | off |
-| `--only` | Comma-separated filename prefixes | all |
-| `--dry-run` | Preview injected prompts, no API calls | off |
-| `--backup` | Copy existing images to `images_backup/` | off |
-| `--aspect-ratio` | 16:9, 9:16, 1:1, 4:3, 3:4 | 16:9 |
-| `--env` | Path to .env file | auto-detect |
+## CLI 옵션
 
-## Writing Good character_lock
+| 옵션 | 설명 | 기본값 |
+|------|------|--------|
+| `<project>` | 프로젝트 폴더 경로 | (필수) |
+| `--missing` | `images/`에 없는 파일만 생성 | off |
+| `--only` | 쉼표 구분 파일 접두사 (예: `03,07`) | 전체 |
+| `--dry-run` | 주입된 프롬프트만 출력, API 미호출 | off |
+| `--backup` | 기존 이미지를 `images_backup/`으로 복사 | off |
+| `--aspect-ratio` | 화면비 (16:9, 9:16, 1:1, 4:3, 3:4) | 16:9 |
+| `--env` | .env 파일 경로 | 자동 탐색 |
 
-### Do: Be specific and repeat invariant features
+---
+
+## character_lock 작성 가이드
+
+### 좋은 예: 구체적, 불변 속성 반복
 
 ```json
 {
@@ -122,11 +133,11 @@ python3 scripts/generate_images.py my_project --only 01,04
 }
 ```
 
-**Invariant features** (repeat in every timeline): ethnicity, age range, face shape, eye shape, cheekbones, build, height, skin tone.
+**불변 속성** (모든 타임라인에 반복): 민족, 나이대, 얼굴형, 눈 모양, 광대, 체형, 키, 피부톤
 
-**Variable features** (change per timeline): hair color/style, clothing, accessories, expression, makeup.
+**가변 속성** (타임라인별 변경): 머리 색상/스타일, 의상, 액세서리, 표정, 메이크업
 
-### Don't: Be vague
+### 나쁜 예: 모호한 묘사
 
 ```json
 {
@@ -137,35 +148,43 @@ python3 scripts/generate_images.py my_project --only 01,04
 }
 ```
 
-## Cost
+이렇게 쓰면 매번 다른 사람이 나옵니다.
 
-| Model | Cost | Notes |
-|-------|------|-------|
-| Imagen 4.0 | ~$0.04/image | Failed/filtered = $0.00 |
+---
 
-6-shot short = ~$0.24 / 18-shot cinematic = ~$0.72
+## 비용
 
-## Known Limitations
+| 모델 | 단가 | 비고 |
+|------|------|------|
+| Imagen 4.0 | ~$0.04/장 | 실패/필터 거부 = 무료 |
 
-1. **Text-only consistency** — Imagen 4.0 doesn't support reference images. Consistency relies on detailed text descriptions.
-2. **Not pixel-perfect** — Same prompt can produce slightly different faces. Extremely detailed physical descriptions minimize variance.
-3. **Safety filters** — Some word combinations (e.g., "authority", "black turtleneck") may be rejected. Adjust wording if this happens.
-4. **Prompt length** — Very long character descriptions may cause the tail of the prompt to be de-prioritized. Keep descriptions concise but specific.
+6컷 숏폼 = ~$0.24 / 18컷 시네마틱 = ~$0.72
 
-## Project Structure
+---
+
+## 알려진 제한사항
+
+1. **텍스트 묘사만 가능** — Imagen 4.0은 레퍼런스 이미지를 지원하지 않음. 텍스트 묘사의 정밀도에 의존
+2. **100% 동일 얼굴은 불가** — 같은 프롬프트라도 미세하게 다를 수 있음. 극도로 상세한 묘사로 편차 최소화
+3. **안전 필터** — "black turtleneck", "authority" 등 일부 조합이 거부될 수 있음. 단어 조정으로 해결
+4. **프롬프트 길이** — 캐릭터 묘사가 너무 길면 뒷부분이 무시될 수 있음. 핵심만 간결하게
+
+---
+
+## 프로젝트 구조
 
 ```
 imagen-character-lock/
-├── SKILL.md                    # Claude Code skill definition
-├── README.md                   # This file
+├── SKILL.md                    # Claude Code 스킬 정의
+├── README.md                   # 이 문서
 ├── scripts/
-│   └── generate_images.py      # Main generation script
+│   └── generate_images.py      # 이미지 생성 스크립트
 ├── templates/
-│   └── prompts.json            # Schema template
+│   └── prompts.json            # 스키마 템플릿
 └── examples/
-    └── jina-day-in-life.json   # Working example (6 scenes, 100% consistency)
+    └── jina-day-in-life.json   # 실전 검증 예제 (6컷, 100% 일관성)
 ```
 
-## License
+## 라이선스
 
 MIT
