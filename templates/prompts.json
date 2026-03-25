@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "style_prefix": "Premium Korean drama cinematography, cinematic realism, natural skin texture, soft film grain, dramatic practical lighting, shallow depth of field, 16:9 widescreen composition.",
+  "character_lock": {
+    "protagonist": {
+      "default": "[Base appearance — ethnicity, age, face shape, eye shape, cheekbones, skin tone, build, height]",
+      "timeline_a": "[Timeline A — same base features + specific outfit, hairstyle, accessories, expression]",
+      "timeline_b": "[Timeline B — same base features + different outfit, hairstyle for different era/mood]"
+    },
+    "supporting_character": {
+      "default": "[Supporting character full appearance description]"
+    }
+  },
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "[Scene title]",
+      "time": "0:00-0:05",
+      "images": [
+        {
+          "id": "s01_01",
+          "filename": "01_scene_name.jpg",
+          "characters": ["protagonist.timeline_a", "supporting_character"],
+          "prompt_en": "[Scene/background description ONLY — character appearance is auto-injected from character_lock]",
+          "prompt_ko": "[Korean description for reference]",
+          "video_prompt": "[Camera movement and action description for video generation]"
+        }
+      ]
+    }
+  ]
+}

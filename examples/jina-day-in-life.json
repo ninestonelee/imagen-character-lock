@@ -1,0 +1,93 @@
+{
+  "schema_version": "2.0",
+  "style_prefix": "Premium Korean drama cinematography, cinematic realism, natural skin texture, soft film grain, dramatic practical lighting, shallow depth of field, 16:9 widescreen composition.",
+  "character_lock": {
+    "jina": {
+      "default": "Korean woman, age 35, shoulder-length straight black hair with subtle side part, sharp almond-shaped eyes, high cheekbones, warm olive skin tone, slender athletic build, natural minimal makeup",
+      "morning": "Korean woman age 35, shoulder-length straight black hair with subtle side part, sharp almond-shaped eyes, high cheekbones, wearing a worn oversized grey hoodie and round glasses, no makeup, slightly messy hair, tired but determined expression",
+      "office": "Korean woman age 35, shoulder-length straight black hair neatly styled with subtle side part, sharp almond-shaped eyes, high cheekbones, wearing a fitted dark navy sweater and tailored charcoal blazer, minimal pearl stud earrings, confident professional posture",
+      "evening": "Korean woman age 35, shoulder-length straight black hair with subtle side part, sharp almond-shaped eyes, high cheekbones, wearing a simple white linen shirt with sleeves rolled up, relaxed but focused expression, warm golden hour lighting on her face"
+    },
+    "cat": {
+      "default": "Orange tabby cat with distinctive white patch on chest, bright green eyes, fluffy medium-length fur, round face"
+    }
+  },
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "Dawn — Coding",
+      "time": "0:00-0:05",
+      "images": [
+        {
+          "id": "s01_01",
+          "filename": "01_jina_dawn_coding.jpg",
+          "characters": ["jina.morning", "cat"],
+          "prompt_en": "Sitting at a cluttered desk in a small studio apartment at 4am, laptop screen illuminating her face with blue light, the cat sleeping on a stack of programming books beside her, empty coffee cups scattered around, city lights visible through the window behind",
+          "prompt_ko": "Dawn coding session with cat",
+          "video_prompt": "Slow push in, cat breathes softly, screen light flickers, 5 seconds"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "title": "Morning — Getting Ready",
+      "time": "0:05-0:10",
+      "images": [
+        {
+          "id": "s02_01",
+          "filename": "02_jina_morning_mirror.jpg",
+          "characters": ["jina.morning"],
+          "prompt_en": "Standing in front of a small bathroom mirror in morning light, putting in contact lenses and taking off round glasses, bathroom counter cluttered with skincare products, soft warm morning light from a frosted window",
+          "prompt_ko": "Morning mirror routine",
+          "video_prompt": "Medium shot removing glasses and blinking, morning light shifts, 5 seconds"
+        },
+        {
+          "id": "s02_02",
+          "filename": "03_jina_feeds_cat.jpg",
+          "characters": ["jina.morning", "cat"],
+          "prompt_en": "Crouching in a small kitchen pouring cat food into a bowl while the cat rubs against her leg, morning sunlight streaming through the kitchen window, warm domestic atmosphere",
+          "prompt_ko": "Feeding the cat",
+          "video_prompt": "She pours food, cat circles her legs eagerly, sunlight streams in, 5 seconds"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "title": "Day — Presentation",
+      "time": "0:10-0:15",
+      "images": [
+        {
+          "id": "s03_01",
+          "filename": "04_jina_office_presentation.jpg",
+          "characters": ["jina.office"],
+          "prompt_en": "Standing confidently in a modern tech startup office explaining ideas to coworkers, whiteboard with colorful diagrams behind, glass walls and plants, warm natural daylight",
+          "prompt_ko": "Office presentation",
+          "video_prompt": "Slow dolly, colleagues nod, screen graphics shift, 5 seconds"
+        },
+        {
+          "id": "s03_02",
+          "filename": "05_jina_office_closeup.jpg",
+          "characters": ["jina.office"],
+          "prompt_en": "Cinematic close-up portrait in a modern workspace, speaking thoughtfully, soft bokeh of glass windows behind, warm afternoon light, professional Korean drama aesthetic",
+          "prompt_ko": "Office close-up portrait",
+          "video_prompt": "Tight close-up, she speaks with measured confidence, 5 seconds"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "title": "Evening — After Work",
+      "time": "0:15-0:25",
+      "images": [
+        {
+          "id": "s04_01",
+          "filename": "06_jina_evening_balcony.jpg",
+          "characters": ["jina.evening", "cat"],
+          "prompt_en": "Sitting on a tiny apartment balcony at golden hour with legs crossed, laptop on her knees, the cat sitting beside her on the railing, Seoul city skyline in warm evening background, wind gently moving her hair, peaceful productive solitude",
+          "prompt_ko": "Evening balcony with cat",
+          "video_prompt": "Wide shot, golden light shifts, cat turns its head, hair moves in breeze, 6 seconds"
+        }
+      ]
+    }
+  ]
+}
